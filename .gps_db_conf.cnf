@@ -1,0 +1,8 @@
+[client]
+user=root
+password=root
+database=gpstracker
+
+
+[mysqldump]
+lock-tables=false
