@@ -19,23 +19,35 @@ You have the following choices server side:
   * ./sql_deployment.sh ../../../.gps_db_conf.cnf
 
 3.  MAC OS
+
   * www directory = /Library/WebServer/Documents 
+
   * soft link in above directory 
+
   		ln -s /Users/ericecheverri/GpsTracker/servers/php gpstracker
 
 		gpstracker -> /Users/ericecheverri/GpsTracker/servers/php
  
 
 Install Android app in phone:
+
 1. Android must ve in same Vlan as server to test the following.
-1. point your browser in the android to your server ip :
+
+2. point your browser in the android to your server ip :
    http://192.168.1.8/gpstracker/displaymap.php ( map should show)
-2. Run app with the android device attached. Every minute a DB transaction of the form :
+
+3. Run app with the android device attached. Every minute a DB transaction of the form :
+
 		07-02 19:35:18.732 26848-26848/com.websmithing.gpstracker D/LocationService: http://192.168.1.8/gpstracker/updatelocation.php?date=2016-07-02%2B19%253A31%253A21&distance=0.0&latitude=42.306306306306304&phonenumber=aeb462a3-0f19-45a8-92eb-2fb478ff01c3&accuracy=6560&sessionid=f783e8b4-3df5-494b-85ae-73a601aee921&speed=0&extrainfo=0&eventtype=android&locationmethod=fused&longitude=-83.54161010535744&username=eric&direction=0
+
 		07-02 19:35:18.732 26848-26848/com.websmithing.gpstracker E/LocationService: sendLocationDataToWebsite - success
+
 		07-02 19:35:18.732 26848-26848/com.websmithing.gpstracker D/LocationService: Return Headers:
+
 		07-02 19:35:18.732 26848-26848/com.websmithing.gpstracker E/LocationService: StatusCode: 200
+
 		07-02 19:35:18.732 26848-26848/com.websmithing.gpstracker D/LocationService: Response: 2016-07-02 19:35:19
+
 		07-02 19:35:18.732 26848-26848/com.websmithing.gpstracker E/LocationService: position: 42.306306306306304, -83.54161010535744 accuracy: 2000.0
 
 
