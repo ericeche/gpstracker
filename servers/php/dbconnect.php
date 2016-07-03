@@ -6,10 +6,10 @@ const DB_SQLITE3 = 2;
 
 // ======== Start of user-configurable variables =======================
 // --- set this to use YOUR database type: ------
-$dbType = DB_SQLITE3;
-
+//$dbType = DB_SQLITE3;
+$dbType = DB_MYSQL;
 // if your database is DB_SQLITE3, you need to set the path to your database file:
-$pathToSQLite = 'sqlite\gpstracker.sqlite';
+//$pathToSQLite = 'sqlite\gpstracker.sqlite';
 
 // ======== End of user-configurable variables =======================
 

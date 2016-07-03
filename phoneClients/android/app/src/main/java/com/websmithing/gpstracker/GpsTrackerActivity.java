@@ -1,13 +1,19 @@
 package com.websmithing.gpstracker;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
@@ -39,6 +45,7 @@ public class GpsTrackerActivity extends ActionBarActivity {
     private AlarmManager alarmManager;
     private Intent gpsTrackerIntent;
     private PendingIntent pendingIntent;
+    private int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 
 
     @Override
@@ -46,7 +53,12 @@ public class GpsTrackerActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gpstracker);
 
+     //   defaultUploadWebsite = getString(R.string.default_upload_website);
         defaultUploadWebsite = getString(R.string.default_upload_website);
+        // In an actual app, you'd want to request a permission when the user performs an action
+        // that requires that permission.
+        getPermissionToReadUserContacts();
+
 
         txtWebsite = (EditText)findViewById(R.id.txtWebsite);
         txtUserName = (EditText)findViewById(R.id.txtUserName);
@@ -262,5 +274,43 @@ public class GpsTrackerActivity extends ActionBarActivity {
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    // Called when the user is performing an action which requires the app to read the
+    // user's contacts
+    public void getPermissionToReadUserContacts() {
+        // 1) Use the support library version ContextCompat.checkSelfPermission(...) to avoid
+        // checking the build version since Context.checkSelfPermission(...) is only available
+        // in Marshmallow
+        // 2) Always check for permission (even if permission has already been granted)
+        // since the user can revoke permissions at any time through Settings
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Fire off an async request to actually get the permission
+            // This will show the standard permission request dialog UI
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            }
+        }
+    }
+
+    // Callback with the request from calling requestPermissions(...)
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        // Make sure it's our original READ_CONTACTS request
+        if (requestCode ==  MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
+            if (grantResults.length == 1 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Access Fine Location permission granted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Access Fine Location permission denied", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 }

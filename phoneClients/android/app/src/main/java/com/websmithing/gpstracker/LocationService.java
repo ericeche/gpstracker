@@ -1,12 +1,15 @@
 package com.websmithing.gpstracker;
 
+import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -80,7 +83,7 @@ public class LocationService extends Service implements
         }
     }
 
-    protected void sendLocationDataToWebsite(Location location) {
+    protected void sendLocationDataToWebsite(final Location location) {
         // formatted for mysql datetime format
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         dateFormat.setTimeZone(TimeZone.getDefault());
@@ -105,20 +108,21 @@ public class LocationService extends Service implements
             editor.putFloat("totalDistanceInMeters", totalDistanceInMeters);
         }
 
-        editor.putFloat("previousLatitude", (float)location.getLatitude());
-        editor.putFloat("previousLongitude", (float)location.getLongitude());
+        editor.putFloat("previousLatitude", (float) location.getLatitude());
+        editor.putFloat("previousLongitude", (float) location.getLongitude());
         editor.apply();
 
         final RequestParams requestParams = new RequestParams();
         requestParams.put("latitude", Double.toString(location.getLatitude()));
         requestParams.put("longitude", Double.toString(location.getLongitude()));
 
-        Double speedInMilesPerHour = location.getSpeed()* 2.2369;
-        requestParams.put("speed",  Integer.toString(speedInMilesPerHour.intValue()));
+        Double speedInMilesPerHour = location.getSpeed() * 2.2369;
+        requestParams.put("speed", Integer.toString(speedInMilesPerHour.intValue()));
 
         try {
             requestParams.put("date", URLEncoder.encode(dateFormat.format(date), "UTF-8"));
-        } catch (UnsupportedEncodingException e) {}
+        } catch (UnsupportedEncodingException e) {
+        }
 
         requestParams.put("locationmethod", location.getProvider());
 
@@ -132,16 +136,16 @@ public class LocationService extends Service implements
         requestParams.put("phonenumber", sharedPreferences.getString("appID", "")); // uuid
         requestParams.put("sessionid", sharedPreferences.getString("sessionID", "")); // uuid
 
-        Double accuracyInFeet = location.getAccuracy()* 3.28;
-        requestParams.put("accuracy",  Integer.toString(accuracyInFeet.intValue()));
+        Double accuracyInFeet = location.getAccuracy() * 3.28;
+        requestParams.put("accuracy", Integer.toString(accuracyInFeet.intValue()));
 
         Double altitudeInFeet = location.getAltitude() * 3.28;
-        requestParams.put("extrainfo",  Integer.toString(altitudeInFeet.intValue()));
+        requestParams.put("extrainfo", Integer.toString(altitudeInFeet.intValue()));
 
         requestParams.put("eventtype", "android");
 
         Float direction = location.getBearing();
-        requestParams.put("direction",  Integer.toString(direction.intValue()));
+        requestParams.put("direction", Integer.toString(direction.intValue()));
 
         final String uploadWebsite = sharedPreferences.getString("defaultUploadWebsite", defaultUploadWebsite);
 
@@ -149,11 +153,17 @@ public class LocationService extends Service implements
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
                 LoopjHttpClient.debugLoopJ(TAG, "sendLocationDataToWebsite - success", uploadWebsite, requestParams, responseBody, headers, statusCode, null);
+                Log.e(TAG, "position: " + location.getLatitude() + ", " + location.getLongitude() + " accuracy: " + location.getAccuracy());
+
                 stopSelf();
             }
+
             @Override
             public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] errorResponse, Throwable e) {
                 LoopjHttpClient.debugLoopJ(TAG, "sendLocationDataToWebsite - failure", uploadWebsite, requestParams, errorResponse, headers, statusCode, e);
+
+                Log.e(TAG, "position: " + location.getLatitude() + ", " + location.getLongitude() + " accuracy: " + location.getAccuracy());
+
                 stopSelf();
             }
         });
@@ -173,7 +183,7 @@ public class LocationService extends Service implements
     public void onLocationChanged(Location location) {
         if (location != null) {
             Log.e(TAG, "position: " + location.getLatitude() + ", " + location.getLongitude() + " accuracy: " + location.getAccuracy());
-
+            sendLocationDataToWebsite(location);
             // we have our desired accuracy of 500 meters so lets quit this service,
             // onDestroy will be called and stop our location uodates
             if (location.getAccuracy() < 500.0f) {
@@ -201,7 +211,18 @@ public class LocationService extends Service implements
         locationRequest = LocationRequest.create();
         locationRequest.setInterval(1000); // milliseconds
         locationRequest.setFastestInterval(1000); // the fastest rate in milliseconds at which your app can handle location updates
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
 
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 googleApiClient, locationRequest, this);

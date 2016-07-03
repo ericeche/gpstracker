@@ -1,6 +1,9 @@
 --------------------------------------------------------------
 -- SQL for creating GpsTracker objext in a PostgreSQL database
 --------------------------------------------------------------
+DROP DATABASE IF EXISTS `gpstracker`;
+
+CREATE DATABASE `gpstracker` CHARSET `utf8` COLLATE `utf8_unicode_ci`;
 DROP VIEW  IF EXISTS v_GetAllRoutesForMap;
 DROP VIEW  IF EXISTS v_GetRouteForMap;
 DROP VIEW  IF EXISTS v_GetRoutes;

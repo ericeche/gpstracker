@@ -1,27 +1,25 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
 -- MySQL dump 10.13  Distrib 5.5.38, for debian-linux-gnu (i686)
 --
 -- Host: localhost    Database: gpstracker
 -- ------------------------------------------------------
 -- Server version	5.5.38-0ubuntu0.12.04.1
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+DROP DATABASE IF EXISTS `gpstracker`;
+
+CREATE DATABASE `gpstracker` CHARSET `utf8` COLLATE `utf8_unicode_ci`;
 
 --
 -- Table structure for table `gpslocations`
 --
+USE `gpstracker`
 
 DROP TABLE IF EXISTS `gpslocations`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `gpslocations` (
   `GPSLocationID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `lastUpdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -33,7 +31,7 @@ CREATE TABLE `gpslocations` (
   `speed` int(10) unsigned NOT NULL DEFAULT '0',
   `direction` int(10) unsigned NOT NULL DEFAULT '0',
   `distance` decimal(10,1) NOT NULL DEFAULT '0.0',
-  `gpsTime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `gpsTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `locationMethod` varchar(50) NOT NULL DEFAULT '',
   `accuracy` int(10) unsigned NOT NULL DEFAULT '0',
   `extraInfo` varchar(255) NOT NULL DEFAULT '',
@@ -43,30 +41,18 @@ CREATE TABLE `gpslocations` (
   KEY `phoneNumberIndex` (`phoneNumber`),
   KEY `userNameIndex` (`userName`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `gpslocations`
 --
 
 LOCK TABLES `gpslocations` WRITE;
-/*!40000 ALTER TABLE `gpslocations` DISABLE KEYS */;
-INSERT INTO `gpslocations` VALUES (1,'2007-01-03 19:37:00',47.627327,-122.325691,'gpsTracker3','gpsTracker3','8BA21D90-3F90-407F-BAAE-800B04B1F5EB',0,0,0.0,'2007-01-03 19:37:00','na',137,'na','gpsTracker'),(2,'2007-01-03 19:38:00',47.607258,-122.330077,'gpsTracker3','gpsTracker3','8BA21D90-3F90-407F-BAAE-800B04B1F5EB',0,0,0.0,'2007-01-03 19:38:00','na',137,'na','gpsTracker'),(3,'2007-01-03 19:39:00',47.601703,-122.324670,'gpsTracker3','gpsTracker3','8BA21D90-3F90-407F-BAAE-800B04B1F5EB',0,0,0.0,'2007-01-03 19:39:00','na',137,'na','gpsTracker'),(4,'0000-00-00 00:00:00',47.593757,-122.195074,'gpsTracker2','gpsTracker2','8BA21D90-3F90-407F-BAAE-800B04B1F5EC',0,0,0.0,'2007-01-03 19:40:00','na',137,'na','gpsTracker'),(5,'2007-01-03 19:41:00',47.601397,-122.190353,'gpsTracker2','gpsTracker2','8BA21D90-3F90-407F-BAAE-800B04B1F5EC',0,0,0.0,'2007-01-03 19:41:00','na',137,'na','gpsTracker'),(6,'2007-01-03 19:42:00',47.610020,-122.190697,'gpsTracker2','gpsTracker2','8BA21D90-3F90-407F-BAAE-800B04B1F5EC',0,0,0.0,'2007-01-03 19:42:00','na',137,'na','gpsTracker'),(7,'2007-01-03 19:43:00',47.636631,-122.214558,'gpsTracker1','gpsTracker1','8BA21D90-3F90-407F-BAAE-800B04B1F5ED',0,0,0.0,'2007-01-03 19:43:00','na',137,'na','gpsTracker'),(8,'2007-01-03 19:44:00',47.637961,-122.201769,'gpsTracker1','gpsTracker1','8BA21D90-3F90-407F-BAAE-800B04B1F5ED',0,0,0.0,'2007-01-03 19:44:00','na',137,'na','gpsTracker'),(9,'2007-01-03 19:45:00',47.642935,-122.209579,'gpsTracker1','gpsTracker1','8BA21D90-3F90-407F-BAAE-800B04B1F5ED',0,0,0.0,'2007-01-03 19:45:00','na',137,'na','gpsTracker');
-/*!40000 ALTER TABLE `gpslocations` ENABLE KEYS */;
+INSERT INTO `gpslocations` VALUES (1,CURRENT_TIMESTAMP,47.627327,-122.325691,'gpsTracker3','gpsTracker3','8BA21D90-3F90-407F-BAAE-800B04B1F5EB',0,0,0.0,CURRENT_TIMESTAMP,'na',137,'na','gpsTracker'),(2,CURRENT_TIMESTAMP,47.607258,-122.330077,'gpsTracker3','gpsTracker3','8BA21D90-3F90-407F-BAAE-800B04B1F5EB',0,0,0.0,CURRENT_TIMESTAMP,'na',137,'na','gpsTracker'),(3,CURRENT_TIMESTAMP,47.601703,-122.324670,'gpsTracker3','gpsTracker3','8BA21D90-3F90-407F-BAAE-800B04B1F5EB',0,0,0.0,CURRENT_TIMESTAMP,'na',137,'na','gpsTracker'),(4,CURRENT_TIMESTAMP,47.593757,-122.195074,'gpsTracker2','gpsTracker2','8BA21D90-3F90-407F-BAAE-800B04B1F5EC',0,0,0.0,CURRENT_TIMESTAMP,'na',137,'na','gpsTracker'),(5,CURRENT_TIMESTAMP,47.601397,-122.190353,'gpsTracker2','gpsTracker2','8BA21D90-3F90-407F-BAAE-800B04B1F5EC',0,0,0.0,CURRENT_TIMESTAMP,'na',137,'na','gpsTracker'),(6,CURRENT_TIMESTAMP,47.610020,-122.190697,'gpsTracker2','gpsTracker2','8BA21D90-3F90-407F-BAAE-800B04B1F5EC',0,0,0.0,CURRENT_TIMESTAMP,'na',137,'na','gpsTracker'),(7,CURRENT_TIMESTAMP,47.636631,-122.214558,'gpsTracker1','gpsTracker1','8BA21D90-3F90-407F-BAAE-800B04B1F5ED',0,0,0.0,CURRENT_TIMESTAMP,'na',137,'na','gpsTracker'),(8,CURRENT_TIMESTAMP,47.637961,-122.201769,'gpsTracker1','gpsTracker1','8BA21D90-3F90-407F-BAAE-800B04B1F5ED',0,0,0.0,CURRENT_TIMESTAMP,'na',137,'na','gpsTracker'),(9,CURRENT_TIMESTAMP,47.642935,-122.209579,'gpsTracker1','gpsTracker1','8BA21D90-3F90-407F-BAAE-800B04B1F5ED',0,0,0.0,CURRENT_TIMESTAMP,'na',137,'na','gpsTracker');
 UNLOCK TABLES;
 
 --
 -- Dumping routines for database 'gpstracker'
 --
-/*!50003 DROP PROCEDURE IF EXISTS `prcDeleteRoute` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `prcDeleteRoute`(
 _sessionID VARCHAR(50))
@@ -75,19 +61,6 @@ BEGIN
   WHERE sessionID = _sessionID;
 END ;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `prcGetAllRoutesForMap` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `prcGetAllRoutesForMap`()
 BEGIN
@@ -100,19 +73,6 @@ JOIN gpslocations ON gpslocations.GPSLocationID = MaxID.ID
 ORDER BY gpsTime;
 END ;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `prcGetRouteForMap` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `prcGetRouteForMap`(
 _sessionID VARCHAR(50))
@@ -123,19 +83,6 @@ BEGIN
   ORDER BY lastupdate;
 END ;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `prcGetRoutes` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `prcGetRoutes`()
 BEGIN
@@ -169,19 +116,6 @@ BEGIN
   DROP TABLE tempRoutes;
 END ;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `prcSaveGPSLocation` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `prcSaveGPSLocation`(
 _latitude DECIMAL(10,7),
@@ -204,18 +138,5 @@ BEGIN
    SELECT NOW();
 END ;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2014-09-14 18:38:51
